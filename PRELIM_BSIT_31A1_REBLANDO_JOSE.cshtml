@@ -1,0 +1,81 @@
+using Microsoft.AspNetCore.Mvc;
+using REBLANDO.Models; 
+using System;
+using System.Collections.Generic;
+
+namespace REBLANDO.Controllers 
+{
+    public class HomeController : Controller
+    {
+        public IActionResult Index()
+        {
+            
+            string studentName = "Jose Esteban S. Reblando.";
+            int score = 87;
+            bool isPassed = (score >= 75);
+            DateTime examDate = DateTime.Now;
+            decimal tuitionFee = 15500.75m;
+
+            ViewBag.StudentName = studentName;
+            ViewBag.Score = score;
+            ViewBag.IsPassed = isPassed;
+            ViewBag.ExamDate = examDate;
+            ViewBag.TuitionFee = tuitionFee;
+
+            string grade;
+            if (score >= 90)
+                grade = "A";
+            else if (score >= 80)
+                grade = "B";
+            else if (score >= 75)
+                grade = "C";
+            else
+                grade = "F";
+
+            ViewBag.Grade = grade;
+            ViewBag.Message = isPassed ? "Congratulations, you passed!" : "Better luck next time.";
+
+            string[] courses = { "Web Systems", "OOP", "DBMS", "UI/UX", "Networking" };
+            string allCourses = string.Join(", ", courses);
+            int courseCount = courses.Length;
+
+            ViewBag.AllCourses = allCourses;
+            ViewBag.CourseCount = courseCount;
+
+            
+            decimal netFee = ComputeNetFee(tuitionFee, 10); // 10% discount
+            ViewBag.NetFee = netFee;
+
+           
+            Student student = new Student
+            {
+                Name = "Your Name",
+                Age = 20,
+                Course = "BSIT"
+            };
+            ViewBag.Student = student;
+
+           
+            List<Student> students = new List<Student>
+            {
+                new Student { Name = "Alice", Age = 21, Course = "BSIT" },
+                new Student { Name = "Bob", Age = 22, Course = "BSCS" },
+                new Student { Name = "Charlie", Age = 20, Course = "BSIS" }
+            };
+            ViewBag.Students = students;
+
+            return View();
+        }
+
+        public IActionResult AboutMe()
+        {
+            return View(); // Make sure Views/Home/AboutMe.cshtml exists
+        }
+
+        
+        private decimal ComputeNetFee(decimal tuition, decimal discountPercent)
+        {
+            return tuition - (tuition * discountPercent / 100);
+        }
+    }
+}
